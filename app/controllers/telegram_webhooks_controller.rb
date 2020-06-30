@@ -6,6 +6,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
     return unless mention? || reply?
 
+    create_list
     reply_with :message, text: "Ok"
   end
 
@@ -18,5 +19,15 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
   def reply?
     @message["reply_to_message"].present?
+  end
+
+  def create_list
+    List.create(
+      source: "telegram",
+      title: @message["chat"]["title"],
+      inner_title: @message["chat"]["title"],
+      inner_id: @message["chat"]["id"].to_s,
+      inner_type: @message["chat"]["type"]
+    )
   end
 end

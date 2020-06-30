@@ -39,8 +39,8 @@ MENTION = {
       "language_code": "en"
     },
     "chat": {
-      "id": -433_657_644,
-      "title": "Test",
+      "id": 10_000,
+      "title": "New Meeting",
       "type": "group",
       "all_members_are_administrators": true
     },
@@ -93,7 +93,7 @@ REPLY = {
   }
 }.freeze
 
-describe TelegramWebhooksController, telegram_bot: :rails do
+describe TelegramWebhooksController, telegram_bot: :rails, type: :request do
   describe "#message" do
     it "does NOT answer for messages" do
       expect { dispatch(MESSAGE) }.not_to send_telegram_message(bot, "Ok")
@@ -106,5 +106,15 @@ describe TelegramWebhooksController, telegram_bot: :rails do
     it "answers `Ok` for replies" do
       expect { dispatch(REPLY) }.to send_telegram_message(bot, "Ok")
     end
+  end
+
+  it "creates chat entity" do
+    allow(List).to receive(:create)
+      .with(source: "telegram", title: "New Meeting",
+            inner_title: "New Meeting", inner_id: "10000", inner_type: "group")
+
+    dispatch(MENTION)
+
+    expect(List).to have_received(:create)
   end
 end
