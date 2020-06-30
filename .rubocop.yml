@@ -1,0 +1,20 @@
+require:
+  - rubocop-rails
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*.rb
+
+Style/Documentation:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+RSpec/DescribeClass:
+  Exclude:
+    - spec/features/**/*.rb
