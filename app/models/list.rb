@@ -3,6 +3,10 @@
 class List < ApplicationRecord
   validates :key, presence: true, uniqueness: true
 
+  def to_param
+    slug
+  end
+
   before_validation :generate_slug
 
   def generate_slug
