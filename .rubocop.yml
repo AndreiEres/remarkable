@@ -17,4 +17,8 @@ Style/StringLiterals:
 
 RSpec/DescribeClass:
   Exclude:
-    - spec/features/**/*.rb
+    - spec/system/**/*.rb
+
+RSpec/DescribeMethod:
+  Exclude:
+    - spec/requests/**/*.rb

@@ -93,7 +93,7 @@ REPLY = {
   }
 }.freeze
 
-describe TelegramWebhooksController, telegram_bot: :rails, type: :request do
+describe "TelegramWebhooks", telegram_bot: :rails do
   describe "#message" do
     it "does NOT answer for messages" do
       expect { dispatch(MESSAGE) }.not_to send_telegram_message(bot, "Ok")
