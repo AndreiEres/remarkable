@@ -14,4 +14,13 @@ describe "User visits a list" do
 
     expect(page).to have_css "h1", text: "My First List"
   end
+
+  it "sees tasks" do
+    list = create(:list, title: "My First List")
+    create(:task, text: "My Task", list: list)
+
+    visit list_path(list)
+
+    expect(page).to have_css "li", text: "My Task"
+  end
 end

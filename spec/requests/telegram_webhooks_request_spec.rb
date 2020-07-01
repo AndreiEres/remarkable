@@ -45,7 +45,7 @@ MENTION = {
       "all_members_are_administrators": true
     },
     "date": 1_593_543_868,
-    "text": "@yet_another_remarkable_bot \ndcdcdc",
+    "text": "@yet_another_remarkable_bot \nNew task",
     "entities": [{ "offset": 0, "length": 27, "type": "mention" }]
   }
 }.freeze
@@ -93,28 +93,27 @@ REPLY = {
   }
 }.freeze
 
-describe "TelegramWebhooks", telegram_bot: :rails do
-  describe "#message" do
-    it "does NOT answer for messages" do
-      expect { dispatch(MESSAGE) }.not_to send_telegram_message(bot, "Ok")
-    end
+describe "TelegramWebhooks", "#message", telegram_bot: :rails do
+  let(:telegram_message) { instance_double(TelegramMessage) }
+  let(:task) { instance_double(Task) }
 
-    it "answers `Ok` for mentions" do
-      expect { dispatch(MENTION) }.to send_telegram_message(bot, "Ok")
-    end
+  before { allow(TelegramMessage).to receive(:new).and_return(telegram_message) }
 
-    it "answers `Ok` for replies" do
-      expect { dispatch(REPLY) }.to send_telegram_message(bot, "Ok")
-    end
+  it "does NOT answer for messages" do
+    allow(telegram_message).to receive(:parse_task).and_return(nil)
+
+    expect { dispatch(MESSAGE) }.not_to send_telegram_message(bot, "Ok")
   end
 
-  it "creates chat entity" do
-    allow(List).to receive(:create)
-      .with(key: "telegram_10000", source: "telegram", title: "New Meeting",
-            inner_title: "New Meeting", inner_id: "10000", inner_type: "group")
+  it "answers `Ok` for mentions" do
+    allow(telegram_message).to receive(:parse_task).and_return(task)
 
-    dispatch(MENTION)
+    expect { dispatch(MENTION) }.to send_telegram_message(bot, "Ok")
+  end
 
-    expect(List).to have_received(:create)
+  it "answers `Ok` for replies" do
+    allow(telegram_message).to receive(:parse_task).and_return(task)
+
+    expect { dispatch(REPLY) }.to send_telegram_message(bot, "Ok")
   end
 end

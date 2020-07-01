@@ -1,3 +1,9 @@
 <h1>
   <%= @list.title %>
 </h1>
+
+<ol>
+  <% @list.tasks.each do |task| %>
+    <li> <%= task.text %> </li>
+  <% end %>
+</ol>

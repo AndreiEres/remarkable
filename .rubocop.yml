@@ -22,3 +22,6 @@ RSpec/DescribeClass:
 RSpec/DescribeMethod:
   Exclude:
     - spec/requests/**/*.rb
+
+RSpec/FilePath:
+  Enabled: false
