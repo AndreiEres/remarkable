@@ -23,6 +23,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
   def create_list
     List.create(
+      key: "telegram_#{@message['chat']['id']}",
       source: "telegram",
       title: @message["chat"]["title"],
       inner_title: @message["chat"]["title"],

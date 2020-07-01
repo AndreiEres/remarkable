@@ -110,7 +110,7 @@ describe TelegramWebhooksController, telegram_bot: :rails, type: :request do
 
   it "creates chat entity" do
     allow(List).to receive(:create)
-      .with(source: "telegram", title: "New Meeting",
+      .with(key: "telegram_10000", source: "telegram", title: "New Meeting",
             inner_title: "New Meeting", inner_id: "10000", inner_type: "group")
 
     dispatch(MENTION)
