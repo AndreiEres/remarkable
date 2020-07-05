@@ -50,7 +50,7 @@ MENTION = {
   }
 }.freeze
 
-REPLY = {
+BOT_REPLY = {
   "update_id": 479_705_438,
   "message": {
     "message_id": 39,
@@ -93,6 +93,45 @@ REPLY = {
   }
 }.freeze
 
+ANOTHER_REPLY = {
+  "update_id": 512_583_965,
+  "message": {
+    "message_id": 6,
+    "from": {
+      "id": 97_253_230,
+      "is_bot": false,
+      "first_name": "Andrei",
+      "last_name": "Eres",
+      "username": "AndreiEres"
+    },
+    "chat": {
+      "id": -433_657_644,
+      "title": "Dev Remarkable Bot",
+      "type": "group",
+      "all_members_are_administrators": true
+    },
+    "date": 1_593_932_341,
+    "reply_to_message": {
+      "message_id": 4,
+      "from": {
+        "id": 875_040_491,
+        "is_bot": false,
+        "first_name": "Eres",
+        "last_name": "Marina"
+      },
+      "chat": {
+        "id": -433_657_644,
+        "title": "Dev Remarkable Bot",
+        "type": "group",
+        "all_members_are_administrators": true
+      },
+      "date": 1_593_932_316,
+      "text": "111"
+    },
+    "text": "1"
+  }
+}.freeze
+
 describe "TelegramWebhooks", "#message", telegram_bot: :rails do
   let(:telegram_message) { instance_double(TelegramMessage) }
   let(:task) { instance_double(Task) }
@@ -111,9 +150,15 @@ describe "TelegramWebhooks", "#message", telegram_bot: :rails do
     expect { dispatch(MENTION) }.to send_telegram_message(bot, "Ok")
   end
 
-  it "answers `Ok` for replies" do
+  it "answers `Ok` for bot replies" do
     allow(telegram_message).to receive(:parse_task).and_return(task)
 
-    expect { dispatch(REPLY) }.to send_telegram_message(bot, "Ok")
+    expect { dispatch(BOT_REPLY) }.to send_telegram_message(bot, "Ok")
+  end
+
+  it "doesn NOT answer for another replies" do
+    allow(telegram_message).to receive(:parse_task).and_return(nil)
+
+    expect { dispatch(ANOTHER_REPLY) }.not_to send_telegram_message(bot, "Ok")
   end
 end

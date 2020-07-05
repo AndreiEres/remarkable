@@ -2,7 +2,7 @@
 
 class TelegramMessage
   def initialize(message)
-    @message = OpenStruct.new(message)
+    @message = structurize(message)
   end
 
   def parse_task
@@ -13,8 +13,22 @@ class TelegramMessage
 
   attr_reader :message
 
+  def structurize(message)
+    JSON.parse(message.to_json, object_class: OpenStruct)
+  end
+
+  def sanitarize(text)
+    text
+      .gsub(/@yet_another_remarkable_bot/, "")
+      .squish
+  end
+
   def text
-    message.text.gsub(/@yet_another_remarkable_bot/, "").squish
+    if reply?
+      reply_params.text
+    else
+      sanitarize message.text
+    end
   end
 
   def task
@@ -29,12 +43,12 @@ class TelegramMessage
     List.find_by(key: list_key) || List.create(**list_params)
   end
 
-  def first_entity
-    OpenStruct.new(message.entities&.first)
+  def reply_params
+    message.reply_to_message
   end
 
   def chat_params
-    @chat_params ||= OpenStruct.new(message.chat)
+    @chat_params ||= message.chat
   end
 
   def list_params
@@ -47,11 +61,11 @@ class TelegramMessage
   end
 
   def taskable?
-    mention? || reply?
+    mention?
   end
 
   def mention?
-    first_entity.type == "mention"
+    message.entities&.first&.type == "mention"
   end
 
   def reply?

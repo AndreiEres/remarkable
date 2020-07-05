@@ -30,7 +30,7 @@ describe TelegramMessage, "#parse_task" do
     end
   end
 
-  it "creates task entity" do # rubocop:disable RSpec/ExampleLength
+  it "creates task entity for direct mention" do # rubocop:disable RSpec/ExampleLength
     telegram_message = described_class.new(mention)
     list = instance_double(List)
 
@@ -40,6 +40,29 @@ describe TelegramMessage, "#parse_task" do
     task = telegram_message.parse_task
 
     expect(task.present?).to be true
+  end
+
+  it "creates task entity for mention in reply" do # rubocop:disable RSpec/ExampleLength
+    telegram_message = described_class.new(bot_reply)
+    list = instance_double(List)
+
+    allow(List).to receive(:find_by).and_return(list)
+    allow(Task).to receive(:create).with(text: "New task in reply", list: list).and_return(true)
+
+    task = telegram_message.parse_task
+
+    expect(task.present?).to be true
+  end
+
+  it "does NOT create task for another mentions" do
+    telegram_message = described_class.new(another_reply)
+    list = instance_double(List)
+
+    allow(List).to receive(:find_by).and_return(list)
+
+    task = telegram_message.parse_task
+
+    expect(task.present?).to be false
   end
 
   private
@@ -52,5 +75,61 @@ describe TelegramMessage, "#parse_task" do
       "date": 1_593_543_868,
       "text": "@yet_another_remarkable_bot \nNew task",
       "entities": [{ "offset": 0, "length": 27, "type": "mention" }] }
+  end
+
+  def bot_reply # rubocop:disable Metrics/MethodLength
+    { "message_id": 39,
+      "from": { "id": 97_253_230,
+                "is_bot": false,
+                "first_name": "Andrei",
+                "last_name": "Eres",
+                "username": "AndreiEres",
+                "language_code": "en" },
+      "chat": { "id": -433_657_644,
+                "title": "Test",
+                "type": "group",
+                "all_members_are_administrators": true },
+      "date": 1_593_544_072,
+      "reply_to_message": { "message_id": 34,
+                            "from": { "id": 97_253_230,
+                                      "is_bot": false,
+                                      "first_name": "Andrei",
+                                      "last_name": "Eres",
+                                      "username": "AndreiEres",
+                                      "language_code": "en" },
+                            "chat": { "id": -433_657_644,
+                                      "title": "Test",
+                                      "type": "group",
+                                      "all_members_are_administrators": true },
+                            "date": 1_593_543_806,
+                            "text": "New task in reply" },
+      "text": "@yet_another_remarkable_bot",
+      "entities": [{ "offset": 0, "length": 27, "type": "mention" }] }
+  end
+
+  def another_reply # rubocop:disable Metrics/MethodLength
+    { "message_id": 6,
+      "from": { "id": 97_253_230,
+                "is_bot": false,
+                "first_name": "Andrei",
+                "last_name": "Eres",
+                "username": "AndreiEres" },
+      "chat": { "id": -433_657_644,
+                "title": "Dev Remarkable Bot",
+                "type": "group",
+                "all_members_are_administrators": true },
+      "date": 1_593_932_341,
+      "reply_to_message": { "message_id": 4,
+                            "from": { "id": 875_040_491,
+                                      "is_bot": false,
+                                      "first_name": "Eres",
+                                      "last_name": "Marina" },
+                            "chat": { "id": -433_657_644,
+                                      "title": "Dev Remarkable Bot",
+                                      "type": "group",
+                                      "all_members_are_administrators": true },
+                            "date": 1_593_932_316,
+                            "text": "111" },
+      "text": "1" }
   end
 end
