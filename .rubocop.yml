@@ -25,3 +25,6 @@ RSpec/DescribeMethod:
 
 RSpec/FilePath:
   Enabled: false
+
+RSpec/MultipleDescribes:
+  Enabled: false

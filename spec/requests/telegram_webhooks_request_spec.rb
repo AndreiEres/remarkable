@@ -162,3 +162,15 @@ describe "TelegramWebhooks", "#message", telegram_bot: :rails do
     expect { dispatch(ANOTHER_REPLY) }.not_to send_telegram_message(bot, "Ok")
   end
 end
+
+describe "TelegramWebhooks", "#link!", telegram_bot: :rails do
+  it "sends link to tasks" do
+    list = instance_double(List)
+    chat_title = ""
+
+    allow(List).to receive(:by_telegram_chat_id).and_return(list)
+    allow(list).to receive(:url).and_return("list_url")
+
+    expect { dispatch_command(:link) }.to send_telegram_message(bot, "Tasks for #{chat_title}\nlist_url")
+  end
+end
