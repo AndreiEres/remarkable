@@ -13,13 +13,17 @@ class TelegramMessage
 
   attr_reader :message
 
+  def bot_name_regexp
+    @bot_name_regexp ||= "@#{Telegram.bot.username}"
+  end
+
   def structurize(message)
     JSON.parse(message.to_json, object_class: OpenStruct)
   end
 
   def sanitarize(text)
     text
-      .gsub(/@yet_another_remarkable_bot/, "")
+      .gsub(bot_name_regexp, "")
       .squish
   end
 
@@ -61,11 +65,12 @@ class TelegramMessage
   end
 
   def taskable?
-    mention?
+    bot_mention?
   end
 
-  def mention?
-    message.entities&.first&.type == "mention"
+  def bot_mention?
+    message.entities&.first&.type == "mention" &&
+      message.text.match?(bot_name_regexp)
   end
 
   def reply?

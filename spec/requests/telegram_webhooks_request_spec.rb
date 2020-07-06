@@ -26,7 +26,7 @@ MESSAGE = {
   }
 }.freeze
 
-MENTION = {
+BOT_MENTION = {
   "update_id": 479_705_437,
   "message": {
     "message_id": 37,
@@ -46,6 +46,30 @@ MENTION = {
     },
     "date": 1_593_543_868,
     "text": "@yet_another_remarkable_bot \nNew task",
+    "entities": [{ "offset": 0, "length": 27, "type": "mention" }]
+  }
+}.freeze
+
+ANOTHER_MENTION = {
+  "update_id": 479_705_437,
+  "message": {
+    "message_id": 37,
+    "from": {
+      "id": 97_253_230,
+      "is_bot": false,
+      "first_name": "Andrei",
+      "last_name": "Eres",
+      "username": "AndreiEres",
+      "language_code": "en"
+    },
+    "chat": {
+      "id": 10_000,
+      "title": "New Meeting",
+      "type": "group",
+      "all_members_are_administrators": true
+    },
+    "date": 1_593_543_868,
+    "text": "@hey \nNew task",
     "entities": [{ "offset": 0, "length": 27, "type": "mention" }]
   }
 }.freeze
@@ -144,10 +168,16 @@ describe "TelegramWebhooks", "#message", telegram_bot: :rails do
     expect { dispatch(MESSAGE) }.not_to send_telegram_message(bot, "Ok")
   end
 
-  it "answers `Ok` for mentions" do
+  it "answers `Ok` for bot mentions" do
     allow(telegram_message).to receive(:parse_task).and_return(task)
 
-    expect { dispatch(MENTION) }.to send_telegram_message(bot, "Ok")
+    expect { dispatch(BOT_MENTION) }.to send_telegram_message(bot, "Ok")
+  end
+
+  it "does NOT answer `Ok` for another mentions" do
+    allow(telegram_message).to receive(:parse_task).and_return(nil)
+
+    expect { dispatch(ANOTHER_MENTION) }.not_to send_telegram_message(bot, "Ok")
   end
 
   it "answers `Ok` for bot replies" do
@@ -156,7 +186,7 @@ describe "TelegramWebhooks", "#message", telegram_bot: :rails do
     expect { dispatch(BOT_REPLY) }.to send_telegram_message(bot, "Ok")
   end
 
-  it "doesn NOT answer for another replies" do
+  it "does NOT answer for another replies" do
     allow(telegram_message).to receive(:parse_task).and_return(nil)
 
     expect { dispatch(ANOTHER_REPLY) }.not_to send_telegram_message(bot, "Ok")

@@ -18,7 +18,7 @@ describe TelegramMessage, "#parse_task" do
 
   context "when list does NOT exist" do
     it "creates list entity" do # rubocop:disable RSpec/ExampleLength
-      telegram_message = described_class.new(mention)
+      telegram_message = described_class.new(bot_mention)
 
       allow(List).to receive(:create)
         .with(key: "telegram_10000", source: "telegram", title: "New Meeting",
@@ -30,8 +30,8 @@ describe TelegramMessage, "#parse_task" do
     end
   end
 
-  it "creates task entity for direct mention" do # rubocop:disable RSpec/ExampleLength
-    telegram_message = described_class.new(mention)
+  it "creates task entity for bot mention" do # rubocop:disable RSpec/ExampleLength
+    telegram_message = described_class.new(bot_mention)
     list = instance_double(List)
 
     allow(List).to receive(:find_by).and_return(list)
@@ -40,6 +40,17 @@ describe TelegramMessage, "#parse_task" do
     task = telegram_message.parse_task
 
     expect(task.present?).to be true
+  end
+
+  it "does NOT create task entity for another mention" do
+    telegram_message = described_class.new(another_mention)
+    list = instance_double(List)
+
+    allow(List).to receive(:find_by).and_return(list)
+
+    task = telegram_message.parse_task
+
+    expect(task.present?).to be false
   end
 
   it "creates task entity for mention in reply" do # rubocop:disable RSpec/ExampleLength
@@ -67,13 +78,23 @@ describe TelegramMessage, "#parse_task" do
 
   private
 
-  def mention
+  def bot_mention
     { "chat": { "id": 10_000,
                 "title": "New Meeting",
                 "type": "group",
                 "all_members_are_administrators": true },
       "date": 1_593_543_868,
       "text": "@yet_another_remarkable_bot \nNew task",
+      "entities": [{ "offset": 0, "length": 27, "type": "mention" }] }
+  end
+
+  def another_mention
+    { "chat": { "id": 10_000,
+                "title": "New Meeting",
+                "type": "group",
+                "all_members_are_administrators": true },
+      "date": 1_593_543_868,
+      "text": "@hey \nNew task",
       "entities": [{ "offset": 0, "length": 27, "type": "mention" }] }
   end
 
