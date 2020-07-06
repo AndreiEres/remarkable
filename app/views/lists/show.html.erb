@@ -2,6 +2,10 @@
   <%= @list.title %>
 </h1>
 
+<div class="alert alert-light alert-disclaimer" role="alert">
+  All your tasks are readable and editable by anybody with the link
+</div>
+
 <ol>
   <% @list.tasks.each do |task| %>
     <li> <%= task.text %> </li>
