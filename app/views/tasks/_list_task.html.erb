@@ -22,12 +22,12 @@
         <%= link_to "Never",
           list_task_path(@list, task, params: { status: :never }),
           method: :patch,
-          class: "link-secondary small mr-3" %>
+          class: "link-secondary small mr-5" %>
       <% else %>
         <%= link_to "Do",
           list_task_path(@list, task, params: { status: :do }),
           method: :patch,
-          class: "link-secondary small mr-3" %>
+          class: "link-secondary small mr-5" %>
       <% end %>
 
       <%= link_to "Delete",
