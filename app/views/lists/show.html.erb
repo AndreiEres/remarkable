@@ -7,15 +7,7 @@
 </div>
 
 <ol>
-  <% @list.tasks.each do |task| %>
-    <li>
-      <div class="task pb-3">
-        <%= task.text %>
-        <div class="task-controls">
-          <%= link_to "Delete", list_task_path(@list, task), method: :delete, class: "link-danger small" %>
-        </div>
-      </div>
-    </li>
-
+  <% @list.tasks.order(:id).each do |task| %>
+    <%= render "tasks/list_task", task: task %>
   <% end %>
 </ol>
