@@ -8,41 +8,6 @@
 
 <ol>
   <% @list.tasks.order(:id).each do |task| %>
-    <li>
-      <div class="task pb-3">
-        <div class="task-text">
-          <% if !task.do? %>
-            <span class="badge bg-secondary"><%= task.status.titleize %></span>
-          <% end %>
-          <%= task.text %>
-        </div>
-        <div class="task-controls">
-          <% if task.do? %>
-            <%= link_to "Done",
-              list_task_path(@list, task, params: { status: :done }),
-              method: :patch,
-              class: "link-secondary small mr-3" %>
-            <%= link_to "Later",
-              list_task_path(@list, task, params: { status: :later }),
-              method: :patch,
-              class: "link-secondary small mr-3" %>
-            <%= link_to "Never",
-              list_task_path(@list, task, params: { status: :never }),
-              method: :patch,
-              class: "link-secondary small mr-3" %>
-          <% else %>
-            <%= link_to "Do",
-              list_task_path(@list, task, params: { status: :do }),
-              method: :patch,
-              class: "link-secondary small mr-3" %>
-          <% end %>
-          <%= link_to "Delete",
-            list_task_path(@list, task),
-            method: :delete,
-            class: "link-secondary small" %>
-        </div>
-      </div>
-    </li>
-
+    <%= render "tasks/list_task", task: task %>
   <% end %>
 </ol>
