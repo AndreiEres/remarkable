@@ -6,7 +6,7 @@
         <span class="badge bg-secondary"><%= task.status.titleize %></span>
       <% end %>
 
-      <%= task.text.gsub(URI.regexp, '<a href="\0">\0</a>').html_safe %>
+      <%= task.text.gsub(URI.regexp, '<a href="\0">\0</a>').html_safe if task.text %>
     </div>
 
     <div class="task-controls">
