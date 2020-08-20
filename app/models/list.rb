@@ -8,7 +8,9 @@ class List < ApplicationRecord
   validates :key, presence: true, uniqueness: true
   before_validation :generate_slug
 
-  scope :by_telegram_chat_id, ->(id) { find_by(inner_id: id) }
+  def self.by_telegram_chat_id(id)
+    find_by(inner_id: id)
+  end
 
   def url
     url_for(self)

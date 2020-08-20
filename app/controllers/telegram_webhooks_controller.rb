@@ -20,7 +20,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
   def reply_with_list_url
     list = List.by_telegram_chat_id(chat["id"])
-    text = "Tasks for #{chat['title']}\n#{list.url}"
+    text = list ? "Tasks for #{chat['title']}\n#{list.url}" : "Create a task first"
 
     reply_with :message, text: text
   end

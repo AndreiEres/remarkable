@@ -11,10 +11,18 @@ describe List, ".create" do
 end
 
 describe List, ".by_telegram_chat_id" do
-  it "finds list by telegram chat id" do
-    list = create(:list, inner_id: "telegram_chat_id")
+  context "when list exist" do
+    it "finds list by telegram chat id" do
+      list = create(:list, inner_id: "telegram_chat_id")
 
-    expect(described_class.by_telegram_chat_id("telegram_chat_id")).to eq list
+      expect(described_class.by_telegram_chat_id("telegram_chat_id")).to eq list
+    end
+  end
+
+  context "when list does NOT exist" do
+    it "returns nil" do
+      expect(described_class.by_telegram_chat_id("another_chat_id")).to be nil
+    end
   end
 end
 
