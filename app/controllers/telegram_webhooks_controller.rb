@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TelegramWebhooksController < Telegram::Bot::UpdatesController
-  rescue_from Telegram::Bot::Error, with: no_method
+  rescue_from Telegram::Bot::Error, with: :handle_error
 
   def message(message)
     telegram_message = TelegramMessage.new(message)
@@ -14,24 +14,24 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
     reply_with_list_url
   end
 
+  def list!(*)
+    reply_with_list_url
+  end
+
   private
 
   def reply_to_task
-    reply_with :message, text: "Ok" if reply_message_exist?
+    reply_with :message, text: "Ok"
   end
 
   def reply_with_list_url
     list = List.by_telegram_chat_id(chat["id"])
     text = list ? "Tasks for #{chat['title']}\n#{list.url}" : "Create a task first"
 
-    reply_with :message, text: text if reply_message_exist?
+    reply_with :message, text: text
   end
 
-  def reply_message_exist?
-    payload && payload["message_id"]
-  end
-
-  def no_method
-    respond_with :message, text: "Sorry, there was an error, but I don't know what to do with it"
+  def handle_error(exception)
+    respond_with :message, text: "Sorry, there was an error:\n>> #{exception}"
   end
 end
