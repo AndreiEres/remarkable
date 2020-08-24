@@ -1,5 +1,5 @@
 <h1>
-  <%= @list.title %>
+  <%= @todolist.title %>
 </h1>
 
 <div class="alert alert-light alert-disclaimer" role="alert">
@@ -7,7 +7,7 @@
 </div>
 
 <ol>
-  <% @list.tasks.order(:id).each do |task| %>
-    <%= render "tasks/list_task", task: task %>
+  <% @todolist.todos.order(:id).each do |todo| %>
+    <%= render "todos/list_todo", todo: todo %>
   <% end %>
 </ol>

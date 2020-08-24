@@ -5,7 +5,6 @@ Rails.application.routes.draw do
 
   root "pages#home"
 
-  resources :lists, only: %i[show] do
-    resources :tasks, only: %i[update destroy]
-  end
+  resources :todolists, only: %i[show]
+  resources :todos, only: %i[update destroy]
 end

@@ -5,8 +5,8 @@ class TelegramMessage
     @message = structurize(message)
   end
 
-  def parse_task
-    task if taskable?
+  def parse_todo
+    todo if todolike?
   end
 
   private
@@ -35,16 +35,16 @@ class TelegramMessage
     end
   end
 
-  def task
-    Task.create(text: text, list: list)
+  def todo
+    Todo.create(text: text, todolist: todolist)
   end
 
   def list_key
     "telegram_#{chat_params.id}"
   end
 
-  def list
-    List.find_by(key: list_key) || List.create(**list_params)
+  def todolist
+    Todolist.find_by(key: list_key) || Todolist.create(**list_params)
   end
 
   def reply_params
@@ -64,7 +64,7 @@ class TelegramMessage
       inner_type: chat_params.type }
   end
 
-  def taskable?
+  def todolike?
     bot_mention?
   end
 

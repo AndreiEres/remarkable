@@ -14,17 +14,3 @@ Style/Documentation:
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
-
-RSpec/DescribeClass:
-  Exclude:
-    - spec/system/**/*.rb
-
-RSpec/DescribeMethod:
-  Exclude:
-    - spec/requests/**/*.rb
-
-RSpec/FilePath:
-  Enabled: false
-
-RSpec/MultipleDescribes:
-  Enabled: false

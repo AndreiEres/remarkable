@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_08_181216) do
+ActiveRecord::Schema.define(version: 2020_08_24_111136) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "lists", force: :cascade do |t|
+  create_table "todolists", force: :cascade do |t|
     t.string "source"
     t.string "title"
     t.string "inner_title"
@@ -25,18 +25,18 @@ ActiveRecord::Schema.define(version: 2020_07_08_181216) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "key"
     t.string "slug"
-    t.index ["key"], name: "index_lists_on_key", unique: true
-    t.index ["slug"], name: "index_lists_on_slug", unique: true
+    t.index ["key"], name: "index_todolists_on_key", unique: true
+    t.index ["slug"], name: "index_todolists_on_slug", unique: true
   end
 
-  create_table "tasks", force: :cascade do |t|
+  create_table "todos", force: :cascade do |t|
     t.text "text"
-    t.bigint "list_id", null: false
+    t.bigint "todolist_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "status", default: 0
-    t.index ["list_id"], name: "index_tasks_on_list_id"
+    t.index ["todolist_id"], name: "index_todos_on_todolist_id"
   end
 
-  add_foreign_key "tasks", "lists"
+  add_foreign_key "todos", "todolists"
 end

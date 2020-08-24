@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-class List < ApplicationRecord
+class Todolist < ApplicationRecord
   include Rails.application.routes.url_helpers
 
-  has_many :tasks, dependent: :destroy
+  has_many :todos, dependent: :destroy
 
   validates :key, presence: true, uniqueness: true
   before_validation :generate_slug

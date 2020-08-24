@@ -5,28 +5,24 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
 
   def message(message)
     telegram_message = TelegramMessage.new(message)
-    task = telegram_message.parse_task
+    todo = telegram_message.parse_todo
 
-    reply_to_task if task.present?
+    reply_to_todo if todo.present?
   end
 
   def link!(*)
-    reply_with_list_url
-  end
-
-  def list!(*)
-    reply_with_list_url
+    reply_with_todolist_url
   end
 
   private
 
-  def reply_to_task
+  def reply_to_todo
     reply_with :message, text: "Ok"
   end
 
-  def reply_with_list_url
-    list = List.by_telegram_chat_id(chat["id"])
-    text = list ? "Tasks for #{chat['title']}\n#{list.url}" : "Create a task first"
+  def reply_with_todolist_url
+    todolist = Todolist.by_telegram_chat_id(chat["id"])
+    text = todolist ? "Todos for #{chat['title']}\n#{todolist.url}" : "Create a todo first"
 
     reply_with :message, text: text
   end

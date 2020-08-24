@@ -1,37 +1,37 @@
 <li>
-  <div class="task pb-3">
+  <div class="todo pb-3">
 
-    <div class="task-text">
-      <% if !task.do? %>
-        <span class="badge bg-secondary"><%= task.status.titleize %></span>
+    <div class="todo-text">
+      <% if !todo.do? %>
+        <span class="badge bg-secondary"><%= todo.status.titleize %></span>
       <% end %>
 
-      <%= task.text.gsub(URI.regexp, '<a href="\0">\0</a>').html_safe if task.text %>
+      <%= todo.text.gsub(URI.regexp, '<a href="\0">\0</a>').html_safe if todo.text %>
     </div>
 
-    <div class="task-controls">
-      <% if task.do? %>
+    <div class="todo-controls">
+      <% if todo.do? %>
         <%= link_to "Done",
-          list_task_path(@list, task, params: { status: :done }),
+          todo_path(todo, params: { status: :done }),
           method: :patch,
           class: "link-secondary small mr-3" %>
         <%= link_to "Later",
-          list_task_path(@list, task, params: { status: :later }),
+          todo_path(todo, params: { status: :later }),
           method: :patch,
           class: "link-secondary small mr-3" %>
         <%= link_to "Never",
-          list_task_path(@list, task, params: { status: :never }),
+          todo_path(todo, params: { status: :never }),
           method: :patch,
           class: "link-secondary small mr-5" %>
       <% else %>
         <%= link_to "Do",
-          list_task_path(@list, task, params: { status: :do }),
+          todo_path(todo, params: { status: :do }),
           method: :patch,
           class: "link-secondary small mr-5" %>
       <% end %>
 
       <%= link_to "Delete",
-        list_task_path(@list, task),
+        todo_path(todo),
         method: :delete,
         class: "link-secondary small" %>
     </div>

@@ -45,7 +45,7 @@ BOT_MENTION = {
       "all_members_are_administrators": true
     },
     "date": 1_593_543_868,
-    "text": "@yet_another_remarkable_bot \nNew task",
+    "text": "@yet_another_remarkable_bot \nNew todo",
     "entities": [{ "offset": 0, "length": 27, "type": "mention" }]
   }
 }.freeze
@@ -69,7 +69,7 @@ ANOTHER_MENTION = {
       "all_members_are_administrators": true
     },
     "date": 1_593_543_868,
-    "text": "@hey \nNew task",
+    "text": "@hey \nNew todo",
     "entities": [{ "offset": 0, "length": 27, "type": "mention" }]
   }
 }.freeze
@@ -156,51 +156,53 @@ ANOTHER_REPLY = {
   }
 }.freeze
 
-describe "TelegramWebhooks", "#message", telegram_bot: :rails do
-  let(:telegram_message) { instance_double(TelegramMessage) }
-  let(:task) { instance_double(Task) }
+describe "TelegramWebhooks", telegram_bot: :rails do
+  describe "message" do
+    let(:telegram_message) { instance_double(TelegramMessage) }
+    let(:todo) { instance_double(Todo) }
 
-  before { allow(TelegramMessage).to receive(:new).and_return(telegram_message) }
+    before { allow(TelegramMessage).to receive(:new).and_return(telegram_message) }
 
-  it "does NOT answer for messages" do
-    allow(telegram_message).to receive(:parse_task).and_return(nil)
+    it "does NOT answer for messages" do
+      allow(telegram_message).to receive(:parse_todo).and_return(nil)
 
-    expect { dispatch(MESSAGE) }.not_to send_telegram_message(bot, "Ok")
+      expect { dispatch(MESSAGE) }.not_to send_telegram_message(bot, "Ok")
+    end
+
+    it "answers `Ok` for bot mentions" do
+      allow(telegram_message).to receive(:parse_todo).and_return(todo)
+
+      expect { dispatch(BOT_MENTION) }.to send_telegram_message(bot, "Ok")
+    end
+
+    it "does NOT answer `Ok` for another mentions" do
+      allow(telegram_message).to receive(:parse_todo).and_return(nil)
+
+      expect { dispatch(ANOTHER_MENTION) }.not_to send_telegram_message(bot, "Ok")
+    end
+
+    it "answers `Ok` for bot replies" do
+      allow(telegram_message).to receive(:parse_todo).and_return(todo)
+
+      expect { dispatch(BOT_REPLY) }.to send_telegram_message(bot, "Ok")
+    end
+
+    it "does NOT answer for another replies" do
+      allow(telegram_message).to receive(:parse_todo).and_return(nil)
+
+      expect { dispatch(ANOTHER_REPLY) }.not_to send_telegram_message(bot, "Ok")
+    end
   end
 
-  it "answers `Ok` for bot mentions" do
-    allow(telegram_message).to receive(:parse_task).and_return(task)
+  describe "#link!" do
+    it "sends link to todos" do
+      todolist = instance_double(Todolist)
+      chat_title = ""
 
-    expect { dispatch(BOT_MENTION) }.to send_telegram_message(bot, "Ok")
-  end
+      allow(Todolist).to receive(:by_telegram_chat_id).and_return(todolist)
+      allow(todolist).to receive(:url).and_return("todolist_url")
 
-  it "does NOT answer `Ok` for another mentions" do
-    allow(telegram_message).to receive(:parse_task).and_return(nil)
-
-    expect { dispatch(ANOTHER_MENTION) }.not_to send_telegram_message(bot, "Ok")
-  end
-
-  it "answers `Ok` for bot replies" do
-    allow(telegram_message).to receive(:parse_task).and_return(task)
-
-    expect { dispatch(BOT_REPLY) }.to send_telegram_message(bot, "Ok")
-  end
-
-  it "does NOT answer for another replies" do
-    allow(telegram_message).to receive(:parse_task).and_return(nil)
-
-    expect { dispatch(ANOTHER_REPLY) }.not_to send_telegram_message(bot, "Ok")
-  end
-end
-
-describe "TelegramWebhooks", "#link!", telegram_bot: :rails do
-  it "sends link to tasks" do
-    list = instance_double(List)
-    chat_title = ""
-
-    allow(List).to receive(:by_telegram_chat_id).and_return(list)
-    allow(list).to receive(:url).and_return("list_url")
-
-    expect { dispatch_command(:link) }.to send_telegram_message(bot, "Tasks for #{chat_title}\nlist_url")
+      expect { dispatch_command(:link) }.to send_telegram_message(bot, "Todos for #{chat_title}\ntodolist_url")
+    end
   end
 end

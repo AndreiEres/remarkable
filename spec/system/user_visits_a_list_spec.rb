@@ -2,31 +2,31 @@
 
 require "rails_helper"
 
-describe "User visits a list" do
-  let(:list) { create(:list, title: "My First List") }
+describe "User visits a todolist", type: :system do
+  let(:todolist) { create(:todolist, title: "My First Todolist") }
 
   before do
     driven_by(:rack_test)
   end
 
-  it "sees a list title" do
-    visit list_path(list)
+  it "sees a todolist title" do
+    visit todolist_path(todolist)
 
-    expect(page).to have_css "h1", text: "My First List"
+    expect(page).to have_css "h1", text: "My First Todolist"
   end
 
   it "sees tasks" do
-    create(:task, text: "My Task", list: list)
+    create(:todo, text: "My todo", todolist: todolist)
 
-    visit list_path(list)
+    visit todolist_path(todolist)
 
-    expect(page).to have_css "li", text: "My Task"
+    expect(page).to have_css "li", text: "My todo"
   end
 
   it "sees formatted links" do
-    create(:task, text: "My Task for https://example.com", list: list)
+    create(:todo, text: "My todo for https://example.com", todolist: todolist)
 
-    visit list_path(list)
+    visit todolist_path(todolist)
 
     expect(page).to have_css "a", text: "https://example.com"
   end
