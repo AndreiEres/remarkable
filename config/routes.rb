@@ -6,5 +6,5 @@ Rails.application.routes.draw do
   root "pages#home"
 
   resources :todolists, only: %i[show]
-  resources :todos, only: %i[update destroy]
+  resources :todos, only: %i[show update destroy]
 end

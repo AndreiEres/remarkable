@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class TodosController < ApplicationController
+  def show
+    @todo = Todo.find_by!(slug: params[:id])
+  end
+
   def update
     todo = Todo.find(params[:id])
     todo.status = params[:status]

@@ -30,6 +30,9 @@
           class: "link-secondary small mr-5" %>
       <% end %>
 
+      <%= link_to "Show",
+        todo_path(todo),
+        class: "link-secondary small mr-3" %>
       <%= link_to "Delete",
         todo_path(todo),
         method: :delete,
