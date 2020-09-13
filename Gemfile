@@ -6,6 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "2.6.5"
 
 gem "bootsnap", ">= 1.4.2", require: false
+gem "image_processing"
 gem "jbuilder", "~> 2.7"
 gem "nanoid"
 gem "pg", ">= 0.18", "< 2.0"
@@ -38,6 +39,7 @@ group :test do
   gem "capybara", ">= 2.15"
   gem "database_cleaner-active_record"
   gem "selenium-webdriver"
+  gem "shoulda-matchers"
   gem "webdrivers"
 end
 

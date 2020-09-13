@@ -6,7 +6,7 @@ class TodosController < ApplicationController
   end
 
   def update
-    todo = Todo.find(params[:id])
+    todo = Todo.find_by!(slug: params[:id])
     todo.status = params[:status]
     todo.save
 
@@ -14,7 +14,7 @@ class TodosController < ApplicationController
   end
 
   def destroy
-    todo = Todo.find(params[:id])
+    todo = Todo.find_by!(slug: params[:id])
     todolist = todo.todolist
     todo.destroy
 
