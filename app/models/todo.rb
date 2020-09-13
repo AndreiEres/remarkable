@@ -2,7 +2,9 @@
 
 class Todo < ApplicationRecord
   enum status: { do: 0, done: 1, later: 2, never: 3 }
+
   belongs_to :todolist
+  has_many :comments, dependent: :destroy
 
   before_validation :generate_slug
 

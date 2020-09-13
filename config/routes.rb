@@ -7,4 +7,5 @@ Rails.application.routes.draw do
 
   resources :todolists, only: %i[show]
   resources :todos, only: %i[show update destroy]
+  resources :comments, only: %i[create]
 end
