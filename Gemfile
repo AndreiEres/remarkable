@@ -5,8 +5,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "2.6.5"
 
-gem "aws-sdk-s3", require: false
 gem "bootsnap", ">= 1.4.2", require: false
+gem "google-cloud-storage", "~> 1.11", require: false
 gem "image_processing"
 gem "jbuilder", "~> 2.7"
 gem "nanoid"
