@@ -6,8 +6,17 @@
   All your tasks are readable and editable by anybody with the link
 </div>
 
-<ol>
-  <% @todolist.todos.order(:id).each do |todo| %>
-    <%= render "todos/list_todo", todo: todo %>
+<% @statuses.each do |status| %>
+  <% if @grouped_todos[status] %>
+    <div class="status__<%= status %>">
+      <h2>
+        <%= status.titleize %>
+      </h2>
+      <ol>
+        <% @grouped_todos[status].each do |todo| %>
+          <%= render "todos/list_todo", todo: todo %>
+        <% end %>
+      </ol>
+    </div>
   <% end %>
-</ol>
+<% end %>

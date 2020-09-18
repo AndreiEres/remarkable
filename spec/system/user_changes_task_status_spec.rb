@@ -9,48 +9,57 @@ describe "User changes todo status", type: :system do
     driven_by(:rack_test)
   end
 
-  it "sees no badge on status do" do
+  def visit_todolist(todolist)
+    visit todolist_path(todolist)
+  end
+
+  def change_first_todo_status(status)
+    click_on status.to_s.titleize, match: :first
+  end
+
+  def have_todo_with_status(text:, status:)
+    have_css ".status__#{status} .todo-text", text: text
+  end
+
+  it "sees created todos on do section" do
     create(:todo, text: "My todo", todolist: todolist)
 
-    visit todolist_path(todolist)
+    visit_todolist todolist
 
-    expect(page).not_to have_css ".todo-text", text: "Do My todo"
+    expect(page).to have_todo_with_status text: "My todo", status: :do
   end
 
   it "changes status to done" do
     create(:todo, text: "My todo to done", todolist: todolist)
 
-    visit todolist_path(todolist)
+    visit_todolist todolist
+    change_first_todo_status :done
 
-    click_on "Done", match: :first
-
-    expect(page).to have_css ".todo-text", text: "Done My todo to done"
+    expect(page).to have_todo_with_status text: "My todo to done", status: :done
   end
 
   it "changes status to later" do
     create(:todo, text: "My todo to later", todolist: todolist)
 
-    visit todolist_path(todolist)
+    visit_todolist todolist
+    change_first_todo_status :later
 
-    click_on "Later", match: :first
-
-    expect(page).to have_css ".todo-text", text: "Later My todo to later"
+    expect(page).to have_todo_with_status text: "My todo to later", status: :later
   end
 
   it "changes status to never" do
     create(:todo, text: "My todo to never", todolist: todolist)
 
-    visit todolist_path(todolist)
+    visit_todolist todolist
+    change_first_todo_status :never
 
-    click_on "Never", match: :first
-
-    expect(page).to have_css ".todo-text", text: "Never My todo to never"
+    expect(page).to have_todo_with_status text: "My todo to never", status: :never
   end
 
   it "sees only do control for status done" do
     create(:todo, text: "My todo to never", status: :done, todolist: todolist)
 
-    visit todolist_path(todolist)
+    visit_todolist todolist
 
     expect(page).not_to have_css ".todo-controls", text: "Done Later Never"
   end
