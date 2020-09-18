@@ -2,10 +2,6 @@
   <div class="todo pb-3">
 
     <div class="todo-text">
-      <% if !todo.do? %>
-        <span class="badge bg-secondary"><%= todo.status.titleize %></span>
-      <% end %>
-
       <%= todo.text.gsub(URI.regexp, '<a href="\0">\0</a>').html_safe if todo.text %>
     </div>
 
