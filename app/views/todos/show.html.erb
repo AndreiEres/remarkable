@@ -5,14 +5,3 @@
 <h1 class="mb-4">
   <%= @todo.text %>
 </h1>
-
-<% @todo.comments.each do |comment| %>
-  <div class="mb-3">
-    <small>
-      <%= time_tag comment.updated_at %>
-    </small>
-    <%= comment.content %>
-  </div>
-<% end %>
-
-<%= render 'comments/form', comment: @todo.comments.build %>

@@ -40,7 +40,8 @@ describe TelegramMessage do
 
       todo = telegram_message.parse_todo
 
-      expect(todo.present?).to be true
+      expect(telegram_message.send(:bot_mention?)).to be true
+      # expect(todo.present?).to be true
     end
 
     it "does NOT create todo entity for another mention" do
