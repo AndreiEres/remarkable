@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class TelegramMessage
-  def initialize(message:, bot:)
-    @message = structurize(message)
+  def initialize(bot:, message:)
     @bot = bot
+    @message = structurize(message)
+    @message_type = TelegramMessageType.new(bot: bot, message: message).type
   end
 
   def parse_todo
