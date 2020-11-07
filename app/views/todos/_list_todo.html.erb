@@ -5,6 +5,12 @@
       <%= todo.text.gsub(URI.regexp, '<a href="\0">\0</a>').html_safe if todo.text %>
     </div>
 
+    <% if todo.image.present? %>
+      <%= link_to url_for(todo.image), target: "_blank", rel: "noopener" do %>
+        <%= image_tag todo.image, class: "w-25 border" %>
+      <% end %>
+    <% end %>
+
     <div class="todo-controls">
       <% if todo.do? %>
         <%= link_to "Done",

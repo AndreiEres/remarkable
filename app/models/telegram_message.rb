@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class TelegramMessage
-  def initialize(message)
+  def initialize(message:, bot:)
     @message = structurize(message)
+    @bot = bot
   end
 
   def parse_todo
@@ -11,10 +12,10 @@ class TelegramMessage
 
   private
 
-  attr_reader :message
+  attr_reader :message, :bot
 
   def bot_name_regexp
-    @bot_name_regexp ||= "@#{Telegram.bot.username}"
+    @bot_name_regexp ||= "@#{bot.username}"
   end
 
   def structurize(message)
@@ -31,12 +32,19 @@ class TelegramMessage
     if reply?
       reply_params.text
     else
-      sanitarize message.text
+      sanitarize message_text
     end
   end
 
   def todo
-    Todo.create(text: text, todolist: todolist)
+    todo = Todo.new(text: text, todolist: todolist)
+
+    if photo?
+      file = TelegramFile.new(bot: bot, file_id: message.photo[-1].file_id)
+      todo.attach_image_by_link(file.link)
+    end
+
+    todo.save
   end
 
   def list_key
@@ -69,11 +77,30 @@ class TelegramMessage
   end
 
   def bot_mention?
-    message.entities&.first&.type == "mention" &&
-      message.text.match?(bot_name_regexp)
+    message_type == "mention" && message_text.match?(bot_name_regexp)
+  end
+
+  def message_type
+    if photo?
+      message.caption_entities&.first&.type
+    else
+      message.entities&.first&.type
+    end
+  end
+
+  def message_text
+    if photo?
+      message.caption
+    else
+      message.text
+    end
   end
 
   def reply?
     message.reply_to_message.present?
+  end
+
+  def photo?
+    message.photo.present?
   end
 end
