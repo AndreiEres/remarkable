@@ -20,7 +20,7 @@ class TelegramMessageTodoPhotoLink
   end
 
   def mention_with_photo_photo_link
-    link message.dig("photo", 0, "file_id")
+    link message.dig("photo", -1, "file_id")
   end
 
   def reply_photo_link
@@ -28,7 +28,7 @@ class TelegramMessageTodoPhotoLink
   end
 
   def reply_with_photo_photo_link
-    link message.dig("reply_to_message", "photo", 0, "file_id")
+    link message.dig("reply_to_message", "photo", -1, "file_id")
   end
 
   def link(file_id)
