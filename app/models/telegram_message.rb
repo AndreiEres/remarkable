@@ -20,9 +20,7 @@ class TelegramMessage
   end
 
   def todolist_key
-    id = message.dig("chat", "title")
-
-    "telegram_#{id}"
+    "telegram_#{message.dig('chat', 'id')}"
   end
 
   def todolist_params
