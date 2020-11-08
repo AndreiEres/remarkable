@@ -32,7 +32,7 @@ class TelegramMessageTodoText
   end
 
   def clean_up_text(text)
-    text
+    (text || "")
       .gsub("@#{bot.username}", "")
       .squish
   end
