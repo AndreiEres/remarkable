@@ -11,6 +11,21 @@ class Todo < ApplicationRecord
 
   has_one_attached :image
 
+  def self.create_from_telegram_message(bot:, message:)
+    telegram_message = TelegramMessage.new(bot: bot, message: message)
+
+    return nil unless telegram_message.todolike?
+
+    text = telegram_message.text
+    photo_link = telegram_message.photo_link
+    todolist = Todolist.find_or_create_from_telegram_message(telegram_message)
+    todo = new(text: text, todolist: todolist)
+
+    todo.attach_image_by_link(photo_link) if photo_link
+
+    todo.save
+  end
+
   def to_param
     slug
   end

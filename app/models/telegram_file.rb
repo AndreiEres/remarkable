@@ -7,7 +7,7 @@ class TelegramFile
   end
 
   def link
-    "https://api.telegram.org/file/bot#{bot.token}/#{file_path}"
+    "https://api.telegram.org/file/bot#{bot_token}/#{file_path}"
   end
 
   private
@@ -20,5 +20,9 @@ class TelegramFile
 
   def file
     bot.get_file(file_id: file_id)
+  end
+
+  def bot_token
+    bot.token
   end
 end

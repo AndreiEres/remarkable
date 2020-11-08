@@ -4,8 +4,7 @@ class TelegramWebhooksController < Telegram::Bot::UpdatesController
   rescue_from Telegram::Bot::Error, with: :handle_error
 
   def message(message)
-    telegram_message = TelegramMessage.new(bot: bot, message: message)
-    todo = telegram_message.parse_todo
+    todo = Todo.create_from_telegram_message(bot: bot, message: message)
 
     reply_to_todo if todo.present?
   end

@@ -27,6 +27,10 @@ describe Todolist do
     end
   end
 
+  describe ".find_or_create_from_telegram_message" do
+    xit "finds or creates todolist from telegram message"
+  end
+
   describe "#url" do
     it "returns todolist's url" do
       todolist = create(:todolist, slug: "slug")

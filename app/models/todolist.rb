@@ -12,6 +12,11 @@ class Todolist < ApplicationRecord
     find_by(inner_id: id)
   end
 
+  def self.find_or_create_from_telegram_message(telegram_message)
+    create_with(telegram_message.todolist_params)
+      .find_or_create_by(key: telegram_message.todolist_key)
+  end
+
   def url
     url_for(self)
   end
