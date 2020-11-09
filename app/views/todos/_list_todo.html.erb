@@ -1,17 +1,20 @@
-<li>
-  <div class="todo pb-3">
+<li class="todo border-bottom pt-3 pb-4">
 
-    <div class="todo-text">
-      <%= todo.text.gsub(URI.regexp, '<a href="\0">\0</a>').html_safe if todo.text %>
-    </div>
+  <div class="todo-text mb-1">
+    <%= todo.text.gsub(URI.regexp, '<a href="\0">\0</a>').html_safe if todo.text %>
+  </div>
 
-    <% if todo.image.present? %>
-      <%= link_to url_for(todo.image), target: "_blank", rel: "noopener" do %>
-        <%= image_tag todo.image, class: "w-25 border" %>
-      <% end %>
+  <% if todo.image.present? %>
+    <%= link_to url_for(todo.image),
+      class: "image-preview-link mb-1",
+      target: "_blank",
+      rel: "noopener" do %>
+      <%= image_tag todo.image %>
     <% end %>
+  <% end %>
 
-    <div class="todo-controls">
+  <div class="todo-controls d-flex justify-content-between">
+    <div>
       <% if todo.do? %>
         <%= link_to "Done",
           todo_path(todo, params: { status: :done }),
@@ -31,15 +34,14 @@
           method: :patch,
           class: "link-secondary small mr-5" %>
       <% end %>
+    </div>
 
-      <%= link_to "Show",
-        todo_path(todo),
-        class: "link-secondary small mr-3" %>
+    <div>
       <%= link_to "Delete",
         todo_path(todo),
         method: :delete,
         class: "link-secondary small" %>
     </div>
-
   </div>
+
 </li>

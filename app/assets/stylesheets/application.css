@@ -29,6 +29,29 @@ h6 {
   font-weight: bold;
 }
 
-.alert-disclaimer {
-  padding: 0;
+ol {
+  list-style-type: none;
+}
+
+ol > li {
+  counter-increment: section;
+}
+
+ol > li:before {
+  content: counter(section) ". ";
+  float: left;
+}
+
+.image-preview-link {
+  display: block;
+  width: 200px;
+  border: 1px solid #fff;
+}
+
+.image-preview-link:hover {
+  border-color: #6c757d;
+}
+
+.image-preview-link img {
+  max-width: 100%;
 }
