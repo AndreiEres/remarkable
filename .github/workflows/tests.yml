@@ -31,8 +31,14 @@ jobs:
       with:
         ruby-version: 2.6.5
 
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 14
+
     - name: Install dependencies
-      run: bundle install
+      run: |
+        bundle install
+        yarn install
 
     - name: Run tests
       env:
