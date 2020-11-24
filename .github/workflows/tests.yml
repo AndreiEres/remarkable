@@ -46,5 +46,5 @@ jobs:
       run: |
         sudo apt-get -yqq install libpq-dev
         bundle exec rails db:create
-        bunde exec rails db:migrate
+        bundle exec rails db:migrate
         script/tests
