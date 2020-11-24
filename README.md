@@ -1,24 +1,14 @@
-# README
+# Remarkable
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Collect tasks from telegram groups
 
-Things you may want to cover:
+Deployed at https://remarkable-app.herokuapp.com
 
-* Ruby version
 
-* System dependencies
+## How to use
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+1. [Add RemarkableBot](https://t.me/yet_another_remarkable_bot) to your telegram group.
+1. Mention the bot when you send remarks or reply to any message and also mention the bot.
+1. The bot collects all remarks as tasks in one place.
+1. Write the command `/link` to get the link with your tasks.
+1. Keep in mind, that all your tasks are readable and editable by anybody with the link.
