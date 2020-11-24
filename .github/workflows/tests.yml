@@ -38,6 +38,8 @@ jobs:
       env:
         PGHOST: 127.0.0.1
         PGUSER: postgres
+        PGDATABASE: postgres
+        PGPASSWORD: postgres
         RAILS_ENV: test
         RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
 
