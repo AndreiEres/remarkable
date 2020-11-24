@@ -7,41 +7,33 @@ describe TelegramMessageTodoPhotoLink do
     let(:bot) { OpenStruct.new(username: "test_bot") }
     let(:file) { instance_double(TelegramFile) }
 
-    let(:mention_message) do
-      {
-        "text" => "@test_bot \nNew todo for mention",
-        "entities" => [{ "type" => "mention" }]
-      }
-    end
+    mention_message = {
+      "text" => "@test_bot \nNew todo for mention",
+      "entities" => [{ "type" => "mention" }]
+    }
 
-    let(:mention_with_photo_message) do
-      {
-        "photo" => [{ "file_id" => "file_id_for_mention_with_photo" }],
-        "caption" => "@test_bot \nNew todo for mention with photo",
-        "caption_entities" => [{ "type" => "mention" }]
-      }
-    end
+    mention_with_photo_message = {
+      "photo" => [{ "file_id" => "file_id_for_mention_with_photo" }],
+      "caption" => "@test_bot \nNew todo for mention with photo",
+      "caption_entities" => [{ "type" => "mention" }]
+    }
 
-    let(:reply_message) do
-      {
-        "reply_to_message" => {
-          "text" => "New todo for reply"
-        },
-        "text" => "@test_bot",
-        "entities" => [{ "type" => "mention" }]
-      }
-    end
+    reply_message = {
+      "reply_to_message" => {
+        "text" => "New todo for reply"
+      },
+      "text" => "@test_bot",
+      "entities" => [{ "type" => "mention" }]
+    }
 
-    let(:reply_with_photo_message) do
-      {
-        "reply_to_message" => {
-          "photo" => [{ "file_id" => "file_id_for_reply_with_photo" }],
-          "caption" => "New todo for reply with photo"
-        },
-        "text" => "@test_bot",
-        "entities" => [{ "type" => "mention" }]
-      }
-    end
+    reply_with_photo_message = {
+      "reply_to_message" => {
+        "photo" => [{ "file_id" => "file_id_for_reply_with_photo" }],
+        "caption" => "New todo for reply with photo"
+      },
+      "text" => "@test_bot",
+      "entities" => [{ "type" => "mention" }]
+    }
 
     it "returns nil for mention" do
       todo_text = described_class.new(bot: bot, message: mention_message, message_type: :mention)
