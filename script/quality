@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+bundle exec rubocop
+bundle exec brakeman --no-pager --quiet --skip-libs --exit-on-warn
+
+bundle exec bundle-audit update
+bundle exec bundle-audit
