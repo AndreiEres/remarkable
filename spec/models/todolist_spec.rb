@@ -28,7 +28,15 @@ describe Todolist do
   end
 
   describe ".find_or_create_from_telegram_message" do
-    xit "finds or creates todolist from telegram message"
+    it "finds or creates todolist from telegram message" do
+      allow(described_class).to receive(:create_with).with({}).and_return(described_class)
+      allow(described_class).to receive(:find_or_create_by).with(key: "key").and_return(true)
+
+      message = instance_double(TelegramMessage, todolist_key: "key", todolist_params: {})
+      described_class.find_or_create_from_telegram_message(message)
+
+      expect(described_class).to have_received(:find_or_create_by)
+    end
   end
 
   describe "#url" do
