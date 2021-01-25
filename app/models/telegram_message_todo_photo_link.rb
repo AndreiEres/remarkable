@@ -8,26 +8,26 @@ class TelegramMessageTodoPhotoLink
   end
 
   def photo_link
-    send "#{message_type}_photo_link".to_sym
+    send "photo_link_for_#{message_type}".to_sym
   end
 
   private
 
   attr_reader :bot, :message, :message_type
 
-  def mention_photo_link
+  def photo_link_for_mention
     nil
   end
 
-  def mention_with_photo_photo_link
+  def photo_link_for_mention_with_photo
     link message.dig("photo", -1, "file_id")
   end
 
-  def reply_photo_link
+  def photo_link_for_reply
     nil
   end
 
-  def reply_with_photo_photo_link
+  def photo_link_for_reply_with_photo
     link message.dig("reply_to_message", "photo", -1, "file_id")
   end
 
