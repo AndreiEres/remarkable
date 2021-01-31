@@ -2,9 +2,9 @@ name: Tests
 
 on:
   push:
-    branches: [ master, dev ]
+    branches: [master, dev]
   pull_request:
-    branches: [ master, dev ]
+    branches: [master, dev]
 
 jobs:
   tests:
@@ -17,7 +17,7 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_DB: postgres
           POSTGRES_PASSWORD: postgres
-        ports: ['5432:5432']
+        ports: ["5432:5432"]
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -25,32 +25,32 @@ jobs:
           --health-retries 5
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 2.6.5
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0.0
 
-    - uses: actions/setup-node@v1
-      with:
-        node-version: 14
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
 
-    - name: Install dependencies
-      run: |
-        bundle install
-        yarn install
+      - name: Install dependencies
+        run: |
+          bundle install
+          yarn install
 
-    - name: Run tests
-      env:
-        PGHOST: 127.0.0.1
-        PGUSER: postgres
-        PGDATABASE: postgres
-        PGPASSWORD: postgres
-        RAILS_ENV: test
-        RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      - name: Run tests
+        env:
+          PGHOST: 127.0.0.1
+          PGUSER: postgres
+          PGDATABASE: postgres
+          PGPASSWORD: postgres
+          RAILS_ENV: test
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
 
-      run: |
-        sudo apt-get -yqq install libpq-dev
-        bundle exec rails db:create
-        bundle exec rails db:migrate
-        script/tests
+        run: |
+          sudo apt-get -yqq install libpq-dev
+          bundle exec rails db:create
+          bundle exec rails db:migrate
+          script/tests
